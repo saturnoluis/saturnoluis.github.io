@@ -1,7 +1,94 @@
 .App {
-  text-align: center;
+  align-items: center;
+  background-color: var(--background-color);
+  display: flex;
   font-size: 10px;
-  background-color: aqua;
-  width: 100vw;
   height: 100vh;
+  justify-content: center;
+  text-align: center;
+  width: 100vw;
+  
+  --background-color: #b0d2cf;
+  --border-color: #2b2825;
+  --border-size: 2px; 
+  --window-color: #e8e2d4;
+}
+
+.Window {
+  background-color: var(--window-color);
+  border-radius: 16px;
+  border: var(--border-size) solid var(--border-color);
+  box-shadow: 4px 4px var(--border-color);
+  display: block;
+  height: 80vh;
+  max-width: 900px;
+  overflow: hidden;
+  width: 90vw;
+}
+
+.Window__header {
+  border-bottom: var(--border-size) solid var(--border-color);
+  height: 72px;
+}
+
+.Window__title {
+  --window-title-height: 30px;
+
+  height: var(--window-title-height);
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.Window__controls {
+  height: var(--window-title-height);
+  display: flex;
+  margin-left: 3px;
+}
+
+.Window__button {
+  align-items: center;
+  background: #b0d2cf;
+  background: none;
+  border: none;
+  display: flex;
+  height: var(--window-title-height);
+  justify-content: center;
+  padding: 0;
+  width: var(--window-title-height);
+  cursor: pointer;
+}
+
+
+.Window__button .Window__button--close,
+.Window__button .Window__button--minimize,
+.Window__button .Window__button--maximize
+{
+  background-color: aqua;
+  background: none;
+  border: var(--border-size) solid var(--border-color);
+  box-sizing: content-box;
+  display: block;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  transition: all .2s;
+}
+
+.Window__button:hover .Window__button--close {
+  background-color: var(--border-color);
+  height: 14px;
+  width: 14px;
+}
+
+.Window__button:hover .Window__button--minimize {
+  border-radius: 2px;
+  height: 2px;
+  width: 16px;
+}
+
+.Window__button:hover .Window__button--maximize {
+  border-radius: 2px;
+  height: 18px;
+  width: 18px;
 }
