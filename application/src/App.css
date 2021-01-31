@@ -21,9 +21,10 @@
   box-shadow: 4px 4px var(--border-color);
   display: block;
   height: 80vh;
-  max-width: 900px;
+  max-width: 1024px;
   overflow: hidden;
   width: 90vw;
+  margin-bottom: 30px;
 }
 
 .Window__header {
@@ -77,18 +78,19 @@
 
 .Window__button:hover .Window__button--close {
   background-color: var(--border-color);
-  height: 14px;
-  width: 14px;
+  height: 12px;
+  width: 12px;
 }
 
 .Window__button:hover .Window__button--minimize {
   border-radius: 2px;
   height: 2px;
   width: 16px;
+  margin-bottom: 8px;
 }
 
 .Window__button:hover .Window__button--maximize {
-  border-radius: 2px;
+  border-radius: 3px;
   height: 18px;
   width: 18px;
 }
