@@ -1,6 +1,6 @@
 .App {
   align-items: center;
-  background-color: var(--background-color);
+  background-color: var(--bg-color-main);
   display: flex;
   font-size: 10px;
   height: 100vh;
@@ -8,10 +8,13 @@
   text-align: center;
   width: 100vw;
   
-  --background-color: #b0d2cf;
-  --border-color: #2b2825;
   --border-size: 2px; 
-  --window-color: #e8e2d4;
+  
+  --bg-color-main: #D0DFFC;
+  --bg-color-title: #A367D8;
+  --bg-color-buttons: #98EFFF;
+  --border-color: #3239BB;
+  --window-color: #CCB5FF;
 }
 
 .Window {
@@ -49,16 +52,18 @@
 
 .Window__header {
   border-bottom: var(--border-size) solid var(--border-color);
-  height: 72px;
+  height: 96px;
 }
 
 .Window__title {
-  --window-title-height: 30px;
+  --window-title-height: 32px;
 
   height: var(--window-title-height);
   display: flex;
   flex-direction: row;
   align-items: flex-start;
+  border-bottom: 2px solid var(--border-color);
+  background-color: var(--bg-color-title);
 }
 
 .Window__controls {
@@ -69,7 +74,6 @@
 
 .Window__button {
   align-items: center;
-  background: #b0d2cf;
   background: none;
   border: none;
   display: flex;
@@ -84,8 +88,7 @@
 .Window__button .Window__button--minimize,
 .Window__button .Window__button--maximize
 {
-  background-color: aqua;
-  background: none;
+  background: var(--bg-color-buttons);
   border: var(--border-size) solid var(--border-color);
   box-sizing: content-box;
   display: block;
