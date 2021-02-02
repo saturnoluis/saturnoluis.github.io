@@ -23,9 +23,9 @@ function Window() {
       <header className="Window__header">
         <div className="Window__title">
           <div className="Window__controls">
-            <WindowButton type="close" onClick={handleClose} />
-            <WindowButton type="minimize" onClick={handleMinimize} />
-            <WindowButton type="maximize" onClick={handleMaximize} />
+            <WindowButton type="close" state={windowState} onClick={handleClose} />
+            <WindowButton type="minimize" state={windowState} onClick={handleMinimize} />
+            <WindowButton type="maximize" state={windowState} onClick={handleMaximize} />
           </div>
         </div>
       </header>
@@ -33,10 +33,10 @@ function Window() {
   );
 }
 
-function WindowButton({ type, onClick }) {
+function WindowButton({ type, state, onClick }) {
   return (
-    <button className="Window__button" onClick={onClick}>
-      <div className={`Window__button--${type}`} />
+    <button className="WindowButton" onClick={onClick}>
+      <div className={`icon icon--${type} icon--${state}`} />
     </button>
   );
 }
