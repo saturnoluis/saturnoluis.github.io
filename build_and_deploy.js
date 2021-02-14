@@ -5,6 +5,14 @@ const main = async () => {
   let status = await git.status();
   let currentBranch = status.current;
 
+  if(currentBranch !== 'develop') {
+    console.log(`Cannot continue: You must run from the 'develop' branch.`);
+    return;
+  }
+
+  console.log(`Pushing changes to 'origin' 'develop'...`);
+  await git.push();
+
   if(status.modified.length) {
     console.log('Cannot continue: You have uncommited files.');
     return;
@@ -22,8 +30,7 @@ const main = async () => {
   }
 
   console.log(`Pulling from 'develop' branch...`);
-
-  await git.merge('develop', { '-m': `Merge branch 'develop' now` });
+  await git.pull('origin', 'develop');
 }
 
 main();
