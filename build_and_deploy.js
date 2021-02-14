@@ -5,16 +5,20 @@ const main = async () => {
   let status = await git.status();
   let currentBranch = status.current;
 
-  console.log(status);
-  return;
+  if(status.modified.length) {
+    console.log('Cannot continue: You have uncommited files.');
+    return;
+  }
 
-  if (currentBranch === 'develop') {
-    console.log(JSON.stringify(`Working on branch: 'develop'`));
+  console.log('Starting build...');
+  
+  if (currentBranch === 'master') {
+    console.log(JSON.stringify(`Working on 'master' branch.`));
   } else {
-    await git.checkout('develop');
+    await git.checkout('master');
     status = await git.status();
     currentBranch = status.current;
-    console.log(`Switched to branch: '${currentBranch}'`);
+    console.log(`Switched to '${currentBranch}' branch.`);
   }
 }
 
