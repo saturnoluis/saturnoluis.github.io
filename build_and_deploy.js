@@ -23,7 +23,7 @@ const main = async () => {
 
   console.log(`Pulling from 'develop' branch...`);
 
-  await git.merge('develop', { '-m': `Merge branch 'develop' now` });
+  await git.merge('develop', { '--commit': true });
 }
 
 main();
