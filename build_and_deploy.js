@@ -20,6 +20,10 @@ const main = async () => {
     currentBranch = status.current;
     console.log(`Switched to '${currentBranch}' branch.`);
   }
+
+  console.log(`Pulling from 'develop' branch...`);
+
+  await git.merge('develop', { '-m': `Merge branch 'develop' now` });
 }
 
 main();
