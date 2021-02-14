@@ -1,0 +1,23 @@
+{
+  "name": "saturnoluis.github.io",
+  "version": "1.0.0",
+  "description": "My personal website experiment",
+  "main": "start.sh",
+  "dependencies": {
+    "simple-git": "^2.34.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saturnoluis/saturnoluis.github.io.git"
+  },
+  "author": "Luis Saturno",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/saturnoluis/saturnoluis.github.io/issues"
+  },
+  "homepage": "https://github.com/saturnoluis/saturnoluis.github.io#readme"
+}
