@@ -1,4 +1,6 @@
 const simpleGit = require('simple-git');
+const path = require('path');
+const { exec } = require('child_process');
 
 const main = async () => {
   const git = simpleGit();
@@ -6,17 +8,17 @@ const main = async () => {
   let currentBranch = status.current;
 
   if(currentBranch !== 'develop') {
-    console.log(`Cannot continue: You must run from the 'develop' branch.`);
+    console.error(`Cannot continue: You must run from the 'develop' branch.`);
     return;
   }
-
-  console.log(`Pushing changes to 'origin' 'develop'...`);
-  await git.push();
-
+  
   if(status.modified.length) {
-    console.log('Cannot continue: You have uncommited files.');
+    console.error('Cannot continue: You have uncommited files.');
     return;
   }
+
+  console.log(`Pushing any changes to 'origin' 'develop'...`);
+  await git.push();
 
   console.log('Starting build...');
   
@@ -29,8 +31,46 @@ const main = async () => {
     console.log(`Switched to '${currentBranch}' branch.`);
   }
 
-  console.log(`Pulling from 'develop' branch...`);
+  console.log(`Pulling from branch 'develop'...`);
   await git.pull('origin', 'develop');
+
+  const cwd = path.resolve('./application');
+  console.log(`Creating build from ${cwd}...`);
+
+  try {
+    const buildOutput = await createBuild(cwd);
+    console.log(buildOutput);
+  } catch (error) {
+    console.error(error);
+    return;
+  }
+
+  console.log('pasa');
+}
+
+function createBuild(cwd) {
+  let output = null;
+  let success = false;
+
+  return new Promise((resolve, reject) => {
+    const process = exec('npm run build', { cwd });
+    
+    process.stdout.on('data', data => {
+      output += data.toString();
+      if(output.includes('Compiled successfully')) {
+        success = true;
+      }
+    });
+    
+    process.stdout.on('close', () => {
+      if(success) {
+        return resolve('Build created successfully.');
+      }
+      
+      console.log(output);
+      return reject(`Build failed.`)
+    });
+  });
 }
 
 main();
