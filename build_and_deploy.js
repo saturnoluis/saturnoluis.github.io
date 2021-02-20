@@ -9,6 +9,8 @@ const main = async () => {
   let status = await git.status();
   let currentBranch = status.current;
 
+  console.log('Starting build...');
+  
   if(currentBranch !== 'develop') {
     console.error(`Cannot continue: You must run from the 'develop' branch.`);
     return;
@@ -21,8 +23,6 @@ const main = async () => {
 
   console.log(`Pushing changes to 'origin develop'...`);
   await git.push();
-
-  console.log('Starting build...');
   
   await git.checkout('master');
   status = await git.status();
