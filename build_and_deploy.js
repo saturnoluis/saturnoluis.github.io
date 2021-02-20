@@ -2,6 +2,8 @@ const simpleGit = require('simple-git');
 const path = require('path');
 const { exec } = require('child_process');
 
+const APP_DIR = path.resolve('./application');
+
 const main = async () => {
   const git = simpleGit();
   let status = await git.status();
@@ -17,35 +19,35 @@ const main = async () => {
     return;
   }
 
-  console.log(`Pushing any changes to 'origin' 'develop'...`);
+  console.log(`Pushing changes to 'origin' 'develop'...`);
   await git.push();
 
   console.log('Starting build...');
   
+  await git.checkout('master');
+  status = await git.status();
+  currentBranch = status.current;
+
   if (currentBranch === 'master') {
-    console.log(JSON.stringify(`Working on 'master' branch.`));
+    console.log(`Switched to 'master' branch.`);
+    console.log(`Pulling from 'origin develop'...`);
+    await git.pull('origin', 'develop');
   } else {
-    await git.checkout('master');
-    status = await git.status();
-    currentBranch = status.current;
-    console.log(`Switched to '${currentBranch}' branch.`);
+    console.error(`'${currentBranch}' is not the correct branch.`);
+    return;
   }
 
-  console.log(`Pulling from branch 'develop'...`);
-  await git.pull('origin', 'develop');
-
-  const cwd = path.resolve('./application');
-  console.log(`Creating build from ${cwd}...`);
+  console.log(`Creating build from ${APP_DIR}...`);
 
   try {
-    const buildOutput = await createBuild(cwd);
-    console.log(buildOutput);
+    const output = await createBuild(APP_DIR);
+    console.log(output);
   } catch (error) {
     console.error(error);
     return;
   }
 
-  console.log('pasa');
+  console.log('Copying static files...');
 }
 
 function createBuild(cwd) {
