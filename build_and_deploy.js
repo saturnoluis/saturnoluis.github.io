@@ -24,12 +24,12 @@ const main = async () => {
   console.log(`Pushing changes to 'origin develop'...`);
   await git.push();
   
+  console.log(`Checking out to 'master' branch...`);
   await git.checkout('master');
   status = await git.status();
   currentBranch = status.current;
 
   if (currentBranch === 'master') {
-    console.log(`Switched to 'master' branch.`);
     console.log(`Pulling from 'origin develop'...`);
     await git.pull('origin', 'develop');
   } else {
