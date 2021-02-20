@@ -19,7 +19,7 @@ const main = async () => {
     return;
   }
 
-  console.log(`Pushing changes to 'origin' 'develop'...`);
+  console.log(`Pushing changes to 'origin develop'...`);
   await git.push();
 
   console.log('Starting build...');
