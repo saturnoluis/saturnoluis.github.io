@@ -24,20 +24,20 @@ const main = async () => {
   console.log(`Pushing changes to 'origin develop'...`);
   await git.push();
   
-  console.log(`Checking out to 'master' branch...`);
   await git.checkout('master');
   status = await git.status();
   currentBranch = status.current;
-
+  
   if (currentBranch === 'master') {
+    console.log(`\nSwitched to 'master' branch.`);
     console.log(`Pulling from 'origin develop'...`);
     await git.pull('origin', 'develop');
   } else {
-    console.error(`'${currentBranch}' is not the correct branch.`);
+    console.error(`Cannot continue: Branch '${currentBranch}'`);
     return;
   }
 
-  console.log(`Creating build from ${APP_DIR}...`);
+  console.log(`\nCreating build from ${APP_DIR}...`);
 
   try {
     const output = await createBuild(APP_DIR);
