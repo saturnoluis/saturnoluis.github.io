@@ -33,7 +33,7 @@ $border-color: #333a44;
   margin: 1em;
 
   &--default {
-    height: 80vh;
+    height: 90vh;
     width: $window-max-width;
     max-width: $window-max-width;
     margin-bottom: $window-title-height;
@@ -43,7 +43,7 @@ $border-color: #333a44;
     height: $window-title-height;
     width: $window-max-width;
     max-width: $window-max-width;
-    margin-top: calc(-100vh + 10em);
+    margin-top: calc(-100vh + 9em);
   }
   
   &--maximized {
