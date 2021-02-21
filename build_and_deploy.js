@@ -15,10 +15,6 @@ const main = async () => {
     console.error(`Error: You must run from the 'develop' branch.`);
     return;
   }
-  if(status.files.length) {
-    console.error(`Error: Uncommited changes in '${status.current}'.`);
-    return;
-  }
 
   console.log(`Pushing changes to 'origin develop'...`);
   await git.push();
