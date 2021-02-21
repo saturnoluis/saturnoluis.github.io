@@ -8,7 +8,8 @@
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "cd ./application && npm run start",
+    "release": "node build_and_deploy.js"
   },
   "repository": {
     "type": "git",
