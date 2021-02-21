@@ -3,59 +3,99 @@ const path = require('path');
 const { exec } = require('child_process');
 
 const APP_DIR = path.resolve('./application');
+const ROOT = path.resolve('./');
 
 const main = async () => {
   const git = simpleGit();
-  let status = await git.status();
-  let currentBranch = status.current;
-
+  
   console.log('Starting build...');
   
-  if(currentBranch !== 'develop') {
-    console.error(`Cannot continue: You must run from the 'develop' branch.`);
-    return;
-  }
+  // let status = await git.status();
+  // if(status.current !== 'develop') {
+  //   console.error(`Error: You must run from the 'develop' branch.`);
+  //   return;
+  // }
   
-  if(status.modified.length) {
-    console.error('Cannot continue: You have uncommited files.');
-    return;
-  }
+  // if(status.files.length) {
+  //   console.error(`Error: Uncommited changes in '${status.current}'.`);
+  //   return;
+  // }
 
-  console.log(`Pushing changes to 'origin develop'...`);
-  await git.push();
+  // console.log(`Pushing changes to 'origin develop'...`);
+  // await git.push();
   
-  await git.checkout('master');
+  // await git.checkout('master');
+  
+  // status = await git.status();
+  // if (status.current !== 'master') {
+  //   console.error(`Error: '${status.current}' is not master.`);
+  //   return;
+  // }
+
+  // if(status.files.length) {
+  //   console.error(`Error: Uncommited changes in '${status.current}'.`);
+  //   return;
+  // }
+
+  // console.log(`Pulling from 'origin develop'...`);
+  // await git.pull('origin', 'develop');
+
+  // console.log(`\nCreating build from ${APP_DIR}...`);
+  // try {
+  //   const output = await createBuild();
+  //   console.log(output);
+  // } catch (error) {
+  //   console.error(error);
+  //   return;
+  // }
+
+  // console.log('\nCopying static files...');
+  // const output = await copyStaticFiles();
+  // console.log(output);
+
   status = await git.status();
-  currentBranch = status.current;
-  
-  if (currentBranch === 'master') {
-    console.log(`\nSwitched to 'master' branch.`);
-    console.log(`Pulling from 'origin develop'...`);
-    await git.pull('origin', 'develop');
-  } else {
-    console.error(`Cannot continue: Branch '${currentBranch}'`);
+  if(!status.files.length) {
+    console.error('Error: No files to commit.');
     return;
   }
 
-  console.log(`\nCreating build from ${APP_DIR}...`);
+  console.log('\nCreating commit for the following files...');
+  const files = status.files.map(file => {
+    console.log(`* ${file.path}`);
+    return file.path;
+  });
 
-  try {
-    const output = await createBuild(APP_DIR);
-    console.log(output);
-  } catch (error) {
-    console.error(error);
+  await git.add(files);
+
+  status = await git.status();
+  if(!status.staged.length) {
+    console.error('Error: No staged files.');
     return;
   }
 
-  console.log('Copying static files...');
+  const date = new Date();
+  const today = date.toDateString();
+
+  await git.commit(`Release ${today}`);
+
+  status = await git.status();
+  if(status.files.length) {
+    console.error(`Error: Uncommited changes in '${status.current}'.`);
+    return;
+  }
+
+  console.log('\nPushing changes...');
+  await git.push();
+
+  console.log('\nFinished :)')
 }
 
-function createBuild(cwd) {
-  let output = null;
+function createBuild() {
+  let output = '';
   let success = false;
 
   return new Promise((resolve, reject) => {
-    const process = exec('npm run build', { cwd });
+    const process = exec('npm run build', { cwd: APP_DIR });
     
     process.stdout.on('data', data => {
       output += data.toString();
@@ -71,6 +111,24 @@ function createBuild(cwd) {
       
       console.log(output);
       return reject(`Build failed.`)
+    });
+  });
+}
+
+function copyStaticFiles() {
+  const buildFolder = path.join(APP_DIR, 'build');
+  const copyCommand = `cp -rf ${buildFolder}/* ${ROOT}`;
+  console.log(copyCommand);
+
+  return new Promise(resolve => {
+    const process = exec(copyCommand);
+    
+    process.stdout.on('data', data => {
+      console.log(data.toString());
+    });
+    
+    process.stdout.on('close', () => {
+      resolve('Static files copied successfully.');
     });
   });
 }
