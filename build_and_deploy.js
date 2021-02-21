@@ -10,48 +10,47 @@ const main = async () => {
   
   console.log('Starting build...');
   
-  // let status = await git.status();
-  // if(status.current !== 'develop') {
-  //   console.error(`Error: You must run from the 'develop' branch.`);
-  //   return;
-  // }
+  let status = await git.status();
+  if(status.current !== 'develop') {
+    console.error(`Error: You must run from the 'develop' branch.`);
+    return;
+  }
+  if(status.files.length) {
+    console.error(`Error: Uncommited changes in '${status.current}'.`);
+    return;
+  }
+
+  console.log(`Pushing changes to 'origin develop'...`);
+  await git.push();
   
-  // if(status.files.length) {
-  //   console.error(`Error: Uncommited changes in '${status.current}'.`);
-  //   return;
-  // }
-
-  // console.log(`Pushing changes to 'origin develop'...`);
-  // await git.push();
+  await git.checkout('master');
   
-  // await git.checkout('master');
-  
-  // status = await git.status();
-  // if (status.current !== 'master') {
-  //   console.error(`Error: '${status.current}' is not master.`);
-  //   return;
-  // }
+  status = await git.status();
+  if (status.current !== 'master') {
+    console.error(`Error: '${status.current}' is not master.`);
+    return;
+  }
+  if(status.files.length) {
+    console.error(`Error: Uncommited changes in '${status.current}'.`);
+    return;
+  }
+  console.log('Switched to master.');
 
-  // if(status.files.length) {
-  //   console.error(`Error: Uncommited changes in '${status.current}'.`);
-  //   return;
-  // }
+  console.log(`\nPulling from 'origin develop'...`);
+  await git.pull('origin', 'develop');
 
-  // console.log(`Pulling from 'origin develop'...`);
-  // await git.pull('origin', 'develop');
+  console.log(`\nCreating build from ${APP_DIR}...`);
+  try {
+    const output = await createBuild();
+    console.log(output);
+  } catch (error) {
+    console.error(error);
+    return;
+  }
 
-  // console.log(`\nCreating build from ${APP_DIR}...`);
-  // try {
-  //   const output = await createBuild();
-  //   console.log(output);
-  // } catch (error) {
-  //   console.error(error);
-  //   return;
-  // }
-
-  // console.log('\nCopying static files...');
-  // const output = await copyStaticFiles();
-  // console.log(output);
+  console.log('\nCopying static files...');
+  const output = await copyStaticFiles();
+  console.log(output);
 
   status = await git.status();
   if(!status.files.length) {
