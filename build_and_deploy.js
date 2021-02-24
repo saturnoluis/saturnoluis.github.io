@@ -30,9 +30,9 @@ const main = async () => {
     console.error(`Error: Uncommited changes in '${status.current}'.`);
     return;
   }
-  console.log('Switched to master.');
-
-  console.log(`\nPulling from 'origin develop'...`);
+  
+  console.log('\nSwitched to master.');
+  console.log(`Pulling from 'origin develop'...`);
   await git.pull('origin', 'develop');
 
   console.log(`\nCreating build from ${APP_DIR}...`);
@@ -82,7 +82,12 @@ const main = async () => {
   console.log('\nPushing changes...');
   await git.push();
 
-  console.log('\nFinished :)')
+  await git.checkout('develop');
+
+  status = await git.status();
+  console.log(`Switched to '${status.current}' branch.`);
+
+  console.log('\nKeep working Luis! :)')
 }
 
 function createBuild() {
